@@ -7,19 +7,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <script>
-        // If an active session exists, skip login and go to workbench
-        if (localStorage.getItem('active_session')) {
-            window.location.replace('workbench.html');
-        }
-    </script>
-
     <div class="auth-card">
         <h2>Surescripts Workbench</h2>
         <div class="button-group">
             <button type="button" class="nav-btn" onclick="showForm('register')">New User</button>
             <button type="button" class="nav-btn" onclick="showForm('login')">Existing User</button>
-            <button type="button" class="nav-btn guest-btn" onclick="handleGuest()">Guest Access</button>
+            <button type="button" class="nav-btn" id="guestBtn" onclick="console.log('Guest Clicked'); handleGuest();">Guest Access</button>
         </div>
 
         <form id="authForm" class="hidden">
@@ -32,5 +25,11 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Emergency check: If script.js fails to load, this helps
+        if (localStorage.getItem('active_session')) {
+            window.location.href = 'workbench.html';
+        }
+    </script>
 </body>
 </html>
