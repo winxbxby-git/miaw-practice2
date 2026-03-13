@@ -13,29 +13,28 @@
             <p>Welcome, <strong id="nameOut"></strong></p>
             <p>Email: <span id="emailOut"></span></p>
         </div>
-        <p style="margin-top:20px; color:#666;">You are currently accessing the health intelligence workbench.</p>
         <button onclick="logout()" style="background:#d93025; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; margin-top:20px;">Logout</button>
     </div>
 
     <script>
         const session = JSON.parse(localStorage.getItem('active_session'));
-
-        if (!session) {
-            window.location.href = 'index.html';
-        } else {
-            if (session.isGuest) {
-                // Display for Guest (No data stored)
-                document.getElementById('nameOut').innerText = "Guest User";
-                document.getElementById('emailOut').innerText = "None (Anonymous)";
-            } else {
-                // Display for Registered User
-                document.getElementById('nameOut').innerText = session.name;
-                document.getElementById('emailOut').innerText = session.email;
-            }
+        if (!session) { window.location.href = 'index.html'; }
+        else {
+            document.getElementById('nameOut').innerText = session.isGuest ? "Guest User" : session.name;
+            document.getElementById('emailOut').innerText = session.isGuest ? "None" : session.email;
         }
 
+        // HANDSHAKE: Pass data to Agentforce
+        window.addEventListener("onEmbeddedMessagingReady", () => {
+            if (session && !session.isGuest) {
+                embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
+                    "_firstName": { value: session.name, isEditableByEndUser: false },
+                    "_email": { value: session.email, isEditableByEndUser: false }
+                });
+            }
+        });
+
         function logout() {
-            // Clears session, keeps registry database
             localStorage.removeItem('active_session');
             window.location.href = 'index.html';
         }
