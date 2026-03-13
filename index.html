@@ -8,7 +8,7 @@
 </head>
 <body>
     <script>
-        // If an active session exists, bypass login immediately
+        // Check for existing session on load
         if (localStorage.getItem('active_session')) {
             window.location.replace('workbench.html');
         }
@@ -16,19 +16,18 @@
 
     <div class="auth-card">
         <h2>Surescripts Workbench</h2>
-        <p id="formSub">Access the Health Intelligence Network</p>
-
         <div class="button-group">
-            <button type="button" class="nav-btn" onclick="showForm('login')">Login</button>
-            <button type="button" class="nav-btn" onclick="showForm('register')">Register</button>
-            <button type="button" class="nav-btn" onclick="showForm('guest')">Guest</button>
+            <button type="button" class="nav-btn" onclick="showForm('register')">New User</button>
+            <button type="button" class="nav-btn" onclick="showForm('login')">Existing User</button>
+            <button type="button" class="nav-btn" onclick="handleGuest()">Guest Access</button>
         </div>
 
         <form id="authForm" class="hidden">
+            <h3 id="formActionTitle">Action</h3>
             <div id="extraFields"></div>
             <input type="email" id="email" placeholder="Email Address" required>
-            <input type="password" id="password" placeholder="Password">
-            <button type="submit" id="submitBtn">Enter Workbench</button>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit" id="submitBtn">Proceed</button>
         </form>
     </div>
 
