@@ -17,7 +17,8 @@ function showForm(mode) {
 }
 
 function handleGuest() {
-    localStorage.setItem('active_session', JSON.stringify({ isGuest: true }));
+    // Clear any old user data and set the Guest flag
+    localStorage.setItem('active_session', JSON.stringify({ isGuest: true, name: '', email: '' }));
     window.location.href = 'workbench.html';
 }
 
