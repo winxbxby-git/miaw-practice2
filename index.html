@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surescripts | Login Portal</title>
+    <title>Surescripts Gateway</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <script>
+        // If an active session exists, bypass login immediately
+        if (localStorage.getItem('active_session')) {
+            window.location.replace('workbench.html');
+        }
+    </script>
+
     <div class="auth-card">
-        <h2 id="formTitle">Surescripts Workbench</h2>
-        <p id="formSub">Select how you'd like to continue</p>
+        <h2>Surescripts Workbench</h2>
+        <p id="formSub">Access the Health Intelligence Network</p>
 
         <div class="button-group">
             <button type="button" class="nav-btn" onclick="showForm('login')">Login</button>
@@ -23,21 +30,8 @@
             <input type="password" id="password" placeholder="Password">
             <button type="submit" id="submitBtn">Enter Workbench</button>
         </form>
-
-        <div id="debug-output"></div>
     </div>
 
     <script src="script.js"></script>
-    <script>
-        // PERSISTENCE CHECK: 
-        // If data exists in localStorage, skip login and go to workbench
-        window.onload = function() {
-            const existingUser = localStorage.getItem('surescripts_user');
-            if (existingUser) {
-                console.log("Existing user found. Redirecting....");
-                window.location.href = 'workbench.html';
-            }
-        };
-    </script>
 </body>
 </html>
