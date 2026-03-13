@@ -1,15 +1,6 @@
-// 1. THE GUEST FUNCTION (Defined first)
-function handleGuest() {
-    const guestData = {
-        name: "Guest User",
-        email: "guest@surescripts.com"
-    };
-    localStorage.setItem('active_session', JSON.stringify(guestData));
-    window.location.href = 'workbench.html';
-}
-
-// 2. THE REST OF THE LOGIC
 let selectedMode = '';
+
+// MOCK BACKEND: Pulls the "Database" of users from storage
 const getRegistry = () => JSON.parse(localStorage.getItem('user_registry') || '[]');
 
 function showForm(mode) {
@@ -19,8 +10,8 @@ function showForm(mode) {
     const title = document.getElementById('formActionTitle');
     
     form.classList.remove('hidden');
+    
     extras.innerHTML = '';
-
     if (mode === 'register') {
         title.innerText = "Register New User";
         extras.innerHTML = '<input type="text" id="fullname" placeholder="Full Name" required>';
@@ -37,21 +28,31 @@ document.getElementById('authForm').addEventListener('submit', function(e) {
 
     if (selectedMode === 'register') {
         const name = document.getElementById('fullname').value;
+        
         if (registry.find(u => u.email === email)) {
-            alert("Email already registered!"); return;
+            alert("This email is already registered. Please Login.");
+            return;
         }
+
+        // Store in "Permanent Backend"
         const newUser = { name, email, password };
         registry.push(newUser);
         localStorage.setItem('user_registry', JSON.stringify(registry));
+
+        // Create Active Session
         localStorage.setItem('active_session', JSON.stringify(newUser));
         window.location.href = 'workbench.html';
-    } else if (selectedMode === 'login') {
+    } 
+    
+    else if (selectedMode === 'login') {
+        // Verify against "Backend"
         const user = registry.find(u => u.email === email && u.password === password);
+        
         if (user) {
             localStorage.setItem('active_session', JSON.stringify(user));
             window.location.href = 'workbench.html';
         } else {
-            alert("Error: Incorrect credentials.");
+            alert("Error: Invalid email or password.");
         }
     }
 });
