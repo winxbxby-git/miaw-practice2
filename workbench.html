@@ -16,28 +16,38 @@
         <button onclick="logout()" style="background:#d93025; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; margin-top:20px;">Logout</button>
     </div>
 
-    <script>
-        const session = JSON.parse(localStorage.getItem('active_session'));
-        if (!session) { window.location.href = 'index.html'; }
-        else {
-            document.getElementById('nameOut').innerText = session.isGuest ? "Guest User" : session.name;
-            document.getElementById('emailOut').innerText = session.isGuest ? "None" : session.email;
-        }
+ <script>
+    const session = JSON.parse(localStorage.getItem('active_session'));
+    
+    if (!session) { 
+        window.location.href = 'index.html'; 
+    } else {
+        document.getElementById('nameOut').innerText = session.isGuest ? "Guest User" : session.name;
+        document.getElementById('emailOut').innerText = session.isGuest ? "None" : session.email;
+    }
 
-        // HANDSHAKE: Pass data to Agentforce
-        window.addEventListener("onEmbeddedMessagingReady", () => {
-            if (session && !session.isGuest) {
-                embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
-                    "_firstName": { value: session.name, isEditableByEndUser: false },
-                    "_email": { value: session.email, isEditableByEndUser: false }
-                });
-            }
+    // HANDSHAKE: This is the safest place for all Pre-chat API calls
+    window.addEventListener("onEmbeddedMessagingReady", () => {
+        console.log("Salesforce Messaging is ready!");
+
+        // 1. Set the Hidden Field (Requirement BIZAN-9)
+        embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
+            "Environment": "Staging" 
         });
 
-        function logout() {
-            localStorage.removeItem('active_session');
-            window.location.href = 'index.html';
+        // 2. Set Visible Fields for Logged-in Users (Requirement BIZAN-11)
+        if (session && !session.isGuest) {
+            embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
+                "_firstName": { value: session.name, isEditableByEndUser: false },
+                "_email": { value: session.email, isEditableByEndUser: false }
+            });
         }
-    </script>
+    });
+
+    function logout() {
+        localStorage.removeItem('active_session');
+        window.location.href = 'index.html';
+    }
+</script>
 </body>
 </html>
