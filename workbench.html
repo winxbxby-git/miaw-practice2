@@ -6,16 +6,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body style="display: block; padding: 40px;">
-    <div class="workbench-container" style="max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 8px;">
+    <div class="workbench-container" style="max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
         <h1>Surescripts Workbench</h1>
         <hr>
-        <div id="identity-box">
-            <p><strong>Logged in as:</strong> <span id="userName"></span></p>
-            <p><strong>Email Identity:</strong> <span id="userEmail"></span></p>
-        </div>
-        <div style="margin-top: 20px; padding: 15px; background: #eef4ff; border-radius: 4px;">
-            <p>Welcome to your health intelligence dashboard. Agentforce is ready to assist you.</p>
-        </div>
+        <p>Welcome to the portal.</p>
+        <p><strong>Identity:</strong> <span id="userName"></span></p>
+        <p><strong>Email:</strong> <span id="userEmail"></span></p>
         
         <button onclick="logout()" style="margin-top: 20px; padding: 10px 20px; background: #d93025; color: white; border: none; border-radius: 4px; cursor: pointer;">
             Log Out
@@ -33,7 +29,7 @@
         }
 
         function logout() {
-            // Remove ONLY the session. The 'user_registry' database remains untouched.
+            // Clears the session but the Registry (Database) stays in the browser
             localStorage.removeItem('active_session');
             window.location.href = 'index.html';
         }
