@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Surescripts Workbench</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="background: #f0f4f8; padding: 50px; text-align: center;">
+    <div class="auth-card" style="width: 80%; max-width: 800px; margin: auto;">
+        <h1>Welcome to Surescripts Workbench</h1>
+        <p>Connected to the Health Intelligence Network.</p>
+        <hr>
+        <div style="text-align: left; padding: 20px;">
+            <h3>Your Profile Details:</h3>
+            <p><strong>Name:</strong> <span id="displayName"></span></p>
+            <p><strong>Email:</strong> <span id="displayEmail"></span></p>
+        </div>
+        <button onclick="logout()" style="background: #cc0000; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Logout & Clear Data</button>
+    </div>
+
+    <script>
+        // Pull data from storage
+        const user = JSON.parse(localStorage.getItem('surescripts_user'));
+        
+        if (!user) {
+            window.location.href = 'index.html'; // Kick out if not logged in
+        } else {
+            document.getElementById('displayName').innerText = user.user_info.first_name;
+            document.getElementById('displayEmail').innerText = user.user_info.email;
+        }
+
+        function logout() {
+            localStorage.removeItem('surescripts_user');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+:root { --sf-blue: #0176d3; --sf-slate: #2b2826; }
+body { font-family: 'Salesforce Sans', Arial, sans-serif; background: #f3f3f3; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+.auth-card { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); width: 400px; text-align: center; }
+.button-group { display: flex; gap: 10px; margin-bottom: 25px; }
+.nav-btn { flex: 1; padding: 10px; border: 1px solid #dddbda; border-radius: 4px; background: white; cursor: pointer; transition: 0.3s; }
+.nav-btn:hover { background: #f3f3f3; }
+.active-btn { background: var(--sf-blue) !important; color: white; border-color: var(--sf-blue); }
+input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #dddbda; border-radius: 4px; box-sizing: border-box; }
+#submitBtn { width: 100%; background: var(--sf-blue); color: white; border: none; padding: 12px; border-radius: 4px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+.hidden { display: none; }
+#debug-output { margin-top: 20px; font-size: 12px; color: #666; text-align: left; background: #f9f9f9; padding: 10px; border-radius: 4px; }
