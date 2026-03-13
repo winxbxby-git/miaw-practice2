@@ -8,7 +8,7 @@
 </head>
 <body>
     <script>
-        // Check for existing session on load
+        // If an active session exists, skip login
         if (localStorage.getItem('active_session')) {
             window.location.replace('workbench.html');
         }
