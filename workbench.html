@@ -19,28 +19,57 @@
     </div>
 
     <script>
-        // Check session on page load
+        // 1. Session Initialization
         const session = JSON.parse(localStorage.getItem('active_session'));
-        
         if (!session) { 
             window.location.href = 'index.html'; 
         } else {
             document.getElementById('nameOut').innerText = session.isGuest ? "Guest User" : session.name;
-            document.getElementById('emailOut').innerText = session.isGuest ? "None" : session.email;
+            document.getElementById('emailOut').innerText = (session.isGuest || !session.email) ? "Not Provided" : session.email;
         }
 
-        /**
-         * HANDSHAKE: BIZAN-9 & BIZAN-11
-         * This listener triggers once the Salesforce messaging bootstrap is ready.
-         */
+        // 2. The Salesforce Handshake (BIZAN-9 & BIZAN-11)
         window.addEventListener("onEmbeddedMessagingReady", () => {
-            console.log("Salesforce Messaging is ready!");
+            console.log("Handshake Initialized: Communicating with LWC...");
 
-            // 1. Set the Hidden Field for Environment (Requirement BIZAN-9)
-            // This ensures routing to the correct queue (Staging)
+            // BIZAN-9: Always set Environment for routing
             embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
                 "Environment": "Staging" 
             });
 
-            // 2. Auto-populate fields for Logged-in Users (Requirement BIZAN-11)
-            // If the user is not a guest, we pass their info to hide those fields in the L
+            // BIZAN-11: Only auto-fill if we have real user data
+            if (session && !session.isGuest && session.email) {
+                embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
+                    "_firstName": { value: session.name, isEditableByEndUser: false },
+                    "_email": { value: session.email, isEditableByEndUser: false }
+                });
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('active_session');
+            window.location.href = 'index.html';
+        }
+
+        // 3. Salesforce Initialization Function
+        function initEmbeddedMessaging() {
+            try {
+                embeddedservice_bootstrap.settings.language = 'en_US';
+                embeddedservice_bootstrap.init(
+                    '00DdM00000r3nAn',
+                    'Workbench_Channel',
+                    'https://orgfarm-0e5a423591-dev-ed.develop.my.site.com/ESWWorkbenchChannel1773392575400',
+                    { scrt2URL: 'https://orgfarm-0e5a423591-dev-ed.develop.my.salesforce-scrt.com' }
+                );
+            } catch (err) {
+                console.error('Error loading Embedded Messaging: ', err);
+            }
+        };
+    </script>
+
+    <script type='text/javascript' 
+            src='https://orgfarm-0e5a423591-dev-ed.develop.my.site.com/ESWWorkbenchChannel1773392575400/assets/js/bootstrap.min.js' 
+            onload='initEmbeddedMessaging()'>
+    </script>
+</body>
+</html>
