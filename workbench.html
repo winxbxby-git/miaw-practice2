@@ -1,22 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Surescripts Workbench</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body style="display: block; padding: 50px;">
-    <div class="workbench-container" style="max-width: 800px; margin: auto; background: white; padding: 40px; border-radius: 8px;">
-        <h1>Surescripts Workbench</h1>
-        <hr>
-        <div id="welcomeArea">
-            <p>Welcome, <strong id="nameOut"></strong></p>
-            <p>Email: <span id="emailOut"></span></p>
-        </div>
-        <button onclick="logout()" style="background:#d93025; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; margin-top:20px;">Logout</button>
-    </div>
-
- <script>
+<script>
+    // 1. Session Handling Logic
     const session = JSON.parse(localStorage.getItem('active_session'));
     
     if (!session) { 
@@ -26,16 +9,16 @@
         document.getElementById('emailOut').innerText = session.isGuest ? "None" : session.email;
     }
 
-    // HANDSHAKE: This is the safest place for all Pre-chat API calls
+    // 2. HANDSHAKE: API calls go here
     window.addEventListener("onEmbeddedMessagingReady", () => {
         console.log("Salesforce Messaging is ready!");
 
-        // 1. Set the Hidden Field (Requirement BIZAN-9)
+        // Set the Hidden Field for both Guests and Users
         embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
             "Environment": "Staging" 
         });
 
-        // 2. Set Visible Fields for Logged-in Users (Requirement BIZAN-11)
+        // Set Visible Fields ONLY for Logged-in Users
         if (session && !session.isGuest) {
             embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
                 "_firstName": { value: session.name, isEditableByEndUser: false },
@@ -49,5 +32,22 @@
         window.location.href = 'index.html';
     }
 </script>
-</body>
-</html>
+
+<script type='text/javascript'>
+	function initEmbeddedMessaging() {
+		try {
+			embeddedservice_bootstrap.settings.language = 'en_US';
+			embeddedservice_bootstrap.init(
+				'00DdM00000r3nAn',
+				'Workbench_Channel',
+				'https://orgfarm-0e5a423591-dev-ed.develop.my.site.com/ESWWorkbenchChannel1773392575400',
+				{
+					scrt2URL: 'https://orgfarm-0e5a423591-dev-ed.develop.my.salesforce-scrt.com'
+				}
+			);
+		} catch (err) {
+			console.error('Error loading Embedded Messaging: ', err);
+		}
+	};
+</script>
+<script type='text/javascript' src='https://orgfarm-0e5a423591-dev-ed.develop.my.site.com/ESWWorkbenchChannel1773392575400/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
