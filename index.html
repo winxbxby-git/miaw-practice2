@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surescripts Gateway</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        // GUEST LOGIC: No name or email is captured or stored
+        function handleGuest() {
+            localStorage.setItem('active_session', JSON.stringify({ isGuest: true }));
+            window.location.href = 'workbench.html';
+        }
+
+        // PERSISTENCE: Auto-login if session exists
+        if (localStorage.getItem('active_session')) {
+            window.location.replace('workbench.html');
+        }
+    </script>
 </head>
 <body>
     <div class="auth-card">
@@ -12,7 +24,7 @@
         <div class="button-group">
             <button type="button" class="nav-btn" onclick="showForm('register')">New User</button>
             <button type="button" class="nav-btn" onclick="showForm('login')">Existing User</button>
-            <button type="button" class="nav-btn" id="guestBtn" onclick="console.log('Guest Clicked'); handleGuest();">Guest Access</button>
+            <button type="button" class="nav-btn" onclick="handleGuest()">Guest Access</button>
         </div>
 
         <form id="authForm" class="hidden">
@@ -23,13 +35,6 @@
             <button type="submit" id="submitBtn">Proceed</button>
         </form>
     </div>
-
     <script src="script.js"></script>
-    <script>
-        // Emergency check: If script.js fails to load, this helps
-        if (localStorage.getItem('active_session')) {
-            window.location.href = 'workbench.html';
-        }
-    </script>
 </body>
 </html>
