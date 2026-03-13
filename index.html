@@ -2,21 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surescripts Gateway</title>
     <link rel="stylesheet" href="style.css">
-    <script>
-        // GUEST LOGIC: No name or email is captured or stored
-        function handleGuest() {
-            localStorage.setItem('active_session', JSON.stringify({ isGuest: true }));
-            window.location.href = 'workbench.html';
-        }
-
-        // PERSISTENCE: Auto-login if session exists
-        if (localStorage.getItem('active_session')) {
-            window.location.replace('workbench.html');
-        }
-    </script>
 </head>
 <body>
     <div class="auth-card">
